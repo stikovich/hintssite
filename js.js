@@ -26,10 +26,11 @@
         const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
         document.querySelector('#timer').innerHTML =
-            `<span>${days}</span> д. : ` +
-            `<span>${hours}</span> ч. : ` +
-            `<span>${minutes}</span> м. : ` +
+            `<span>${days}</span> д. ` +
+            `<span>${hours}</span> ч. ` +
+            `<span>${minutes}</span> м. ` +
             `<span>${seconds}</span> с.`;
     }
 
     setInterval(updateTimer, 1000); // Обновляем каждую секунду
+
