@@ -9,7 +9,7 @@
     startDate = new Date(startDate);
 
     // Фиксированная дата конца отсчета (можно менять на нужную)
-    const deadline = new Date("December 15, 2025");
+    const deadline = new Date("December 22, 2025");
 
     function updateTimer() {
         const now = new Date();
@@ -33,4 +33,5 @@
     }
 
     setInterval(updateTimer, 1000); // Обновляем каждую секунду
+
 
