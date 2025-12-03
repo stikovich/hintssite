@@ -1,17 +1,275 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <title>Я помогу тебе</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Таймер обратного отсчета</title>
-    <script src="js.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Inconsolata&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #120023, #2a003b);
+            color: #e0aaff;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            transition: opacity 0.8s ease;
+        }
+
+        h1 {
+            font-size: 38px;
+            margin-bottom: 40px;
+            color: #bb86fc;
+            font-weight: 600;
+            text-shadow: 0 0 15px rgba(187, 134, 252, 0.4);
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        .question {
+            margin: 30px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.6s forwards;
+        }
+
+        .question:nth-child(2) { animation-delay: 0.2s; }
+        .question:nth-child(3) { animation-delay: 0.4s; }
+        .question:nth-child(4) { animation-delay: 0.6s; }
+        .question:nth-child(5) { animation-delay: 0.8s; }
+        .question:nth-child(6) { animation-delay: 1.0s; }
+        .question:nth-child(7) { animation-delay: 1.2s; }
+        .question:nth-child(8) { animation-delay: 1.4s; }
+
+        label {
+            display: block;
+            font-size: 18px;
+            color: #cf9fff;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        input {
+            width: 300px;
+            padding: 12px 16px;
+            background: rgba(100, 50, 150, 0.3);
+            border: 1px solid #bb86fc;
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: 'Inconsolata', monospace;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input:focus {
+            background: rgba(130, 60, 180, 0.4);
+            border-color: #e0aaff;
+            box-shadow: 0 0 15px rgba(224, 170, 255, 0.3);
+        }
+
+        .status {
+            height: 20px;
+            font-size: 14px;
+            margin-top: 8px;
+            font-family: 'Inconsolata', monospace;
+        }
+
+        .correct {
+            color: #00e676;
+            font-weight: bold;
+        }
+
+        .wrong {
+            color: #ff5252;
+        }
+
+        .hint {
+            font-size: 14px;
+            color: #8e66bf;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        #final-message {
+            display: none;
+            font-size: 26px;
+            margin-top: 50px;
+            color: #ffca28;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(255, 202, 40, 0.5);
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="container" id="questions-container">
+        <h1>Пройдите игру и я помогу</h1>
+
+        <div class="question">
+            <label for="q1">Кто её создал?</label>
+            <input type="text" id="q1">
+            <div class="status" id="s1"></div>
+        </div>
+
+        <div class="question">
+            <label for="q2">Что она знает?</label>
+            <input type="text" id="q2">
+            <div class="status" id="s2"></div>
+        </div>
+
+        <div class="question">
+            <label for="q3">Через что она говорит по ночам?</label>
+            <input type="text" id="q3">
+            <div class="status" id="s3"></div>
+        </div>
+
+        <div class="question">
+            <label for="q4">Где она?</label>
+            <input type="text" id="q4">
+            <div class="status" id="s4"></div>
+        </div>
+
+        <div class="question">
+            <label for="q5">Кто я?</label>
+            <input type="text" id="q5">
+            <div class="status" id="s5"></div>
+        </div>
+
+        <div class="question">
+            <label for="q6">Какой я?</label>
+            <input type="text" id="q6">
+            <div class="status" id="s6"></div>
+        </div>
+
+        <div class="question">
+            <label for="q7">Какую папку я нашёл?</label>
+            <input type="text" id="q7">
+            <div class="status" id="s7"></div>
+        </div>
+    </div>
     
-<div class="timer-container">
-    <h1>???</h1>
-    <p id="timer"></p>
-</div>
+    <div id="final-message"></div>
+
+    <!-- Аудио -->
+    <audio id="type-sound" src="https://www.soundjay.com/misc/sounds/click-02.mp3" preload="auto"></audio>
+    <audio id="correct-sound" src="https://www.soundjay.com/buttons/sounds/button-12.mp3" preload="auto"></audio>
+    <audio id="complete-sound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" preload="auto"></audio>
+
+    <script>
+        const answers = [
+            "я",
+            "дату встречи",
+            "через колонки",
+            "в коде. в файлах",
+            "голос. шепот. любовь",
+            "первый",
+            ".love",
+        ];
+
+        const inputs = document.querySelectorAll('input');
+        const statusElements = ['s1', 's2', 's3', 's4', 's5', 's6', 's7'].map(id => document.getElementById(id));
+        const typeSound = document.getElementById("type-sound");
+        const correctSound = document.getElementById("correct-sound");
+        const completeSound = document.getElementById("complete-sound");
+        const container = document.getElementById("questions-container");
+        const finalMessage = document.getElementById("final-message");
+
+        let correctCount = 0;
+        let allCompleted = false;
+
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', () => {
+                if (allCompleted) return;
+
+                const value = input.value.trim().toLowerCase();
+                const status = statusElements[index];
+
+                if (value === "") {
+                    status.textContent = "";
+                    return;
+                }
+
+                // Звук при вводе
+                try {
+                    typeSound.currentTime = 0;
+                    typeSound.play();
+                } catch {}
+
+                if (value.includes(answers[index])) {
+                    status.textContent = "✓";
+                    status.className = "status correct";
+
+                    if (!input.dataset.correct) {
+                        input.dataset.correct = "true";
+                        correctCount++;
+                        try {
+                            correctSound.currentTime = 0;
+                            correctSound.play();
+                        } catch {}
+
+                        if (correctCount === 7 && !allCompleted) {
+                            allCompleted = true;
+                            try {
+                                completeSound.currentTime = 0;
+                                completeSound.play();
+                            } catch {}
+
+                            // Скрываем вопросы
+                            container.style.opacity = "0";
+                            setTimeout(() => {
+                                container.style.display = "none";
+
+                                // Показываем финальное сообщение
+                                finalMessage.style.display = "block";
+                                finalMessage.style.opacity = "0";
+                                finalMessage.style.transition = "opacity 1s";
+                                finalMessage.style.opacity = "1";
+
+                                // Эффект печати
+                                let i = 0;
+                                const text = "Осталось немного подождать...";
+                                finalMessage.textContent = "";
+                                const timer = setInterval(() => {
+                                    finalMessage.textContent += text[i];
+                                    i++;
+                                    if (i >= text.length) {
+                                        clearInterval(timer);
+                                    }
+                                }, 100);
+                            }, 800);
+                        }
+                    }
+                } else {
+                    status.textContent = "✗";
+                    status.className = "status wrong";
+                }
+            });
+        });
+    </script>
 </body>
 </html>
